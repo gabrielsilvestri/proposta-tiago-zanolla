@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta | Tiago Zanolla — Infraestrutura de IA para Operação de Conteúdo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg-card:#f1f3f8;--bg-hover:#e8ebf2;--bg-elevated:#e4e7f0;
+  --navy:#1a3a6b;--navy-light:#244d8a;--navy-dim:rgba(26,58,107,0.06);
+  --text:#0f1d3a;--text-sec:#4a5578;--text-muted:#8891a8;
+  --border:#dfe3ed;--radius:14px;
+  --green:#16a34a;--green-dim:rgba(22,163,74,0.08);
+  --blue:#2563eb;--blue-dim:rgba(37,99,235,0.08);
+  --purple:#7c3aed;--purple-dim:rgba(124,58,237,0.08);
+  --orange:#ea580c;--orange-dim:rgba(234,88,12,0.08);
+  --gold:#b8860b;--gold-dim:rgba(184,134,11,0.08);
+  --teal:#0d9488;--teal-dim:rgba(13,148,136,0.08);
+  --red:#dc2626;--red-dim:rgba(220,38,38,0.08);
+  --cyan:#0891b2;--cyan-dim:rgba(8,145,178,0.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.site-header{background:linear-gradient(135deg,#0f1d3a 0%,#1a3a6b 50%,#244d8a 100%);padding:48px 24px 20px;text-align:center;position:sticky;top:0;z-index:100;transition:box-shadow .3s}
+.site-header.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.15)}
+.header-badge{display:inline-block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);padding:4px 14px;border-radius:20px;margin-bottom:12px}
+.header-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,36px);font-weight:700;color:#fff;margin-bottom:4px}
+.header-sub{color:rgba(255,255,255,.55);font-size:15px;margin-bottom:24px}
+.tab-nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:0 12px 24px}
+.tab-btn{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.tab-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.tab-btn.active{background:#fff;color:var(--navy);border-color:#fff}
+main{max-width:960px;margin:0 auto;padding:0 24px 60px}
+.tab-panel{display:none;animation:fadeIn .4s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.section{margin-top:40px}.section:first-child{margin-top:32px}
+.section-label{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--navy);font-weight:700;margin-bottom:6px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,34px);font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.25}
+.section-desc{color:var(--text-sec);font-size:16px;max-width:720px;margin-bottom:24px}
+.card-grid{display:grid;gap:16px}
+.card-grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card-grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card-grid-4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .2s}
+.card:hover{border-color:var(--navy-light);background:var(--bg-hover)}
+.stat-card{text-align:center;padding:28px 20px}
+.stat-card .num{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,42px);font-weight:700;color:var(--navy);line-height:1.1}
+.stat-card .label{font-size:13px;color:var(--text-muted);margin-top:6px;font-weight:500}
+.info-card .ic-title{font-weight:700;font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.info-card .ic-text{font-size:14px;color:var(--text-sec);line-height:1.65}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-navy{background:var(--navy)}.dot-green{background:var(--green)}.dot-blue{background:var(--blue)}.dot-purple{background:var(--purple)}.dot-orange{background:var(--orange)}.dot-gold{background:var(--gold)}.dot-teal{background:var(--teal)}.dot-red{background:var(--red)}.dot-cyan{background:var(--cyan)}
+.callout{background:var(--navy-dim);border:1px solid rgba(26,58,107,.12);border-radius:var(--radius);padding:20px 24px;display:flex;gap:14px;align-items:flex-start}
+.callout-green{background:var(--green-dim);border-color:rgba(22,163,74,.15)}
+.callout-red{background:var(--red-dim);border-color:rgba(220,38,38,.15)}
+.callout-orange{background:var(--orange-dim);border-color:rgba(234,88,12,.15)}
+.callout-gold{background:var(--gold-dim);border-color:rgba(184,134,11,.15)}
+.cl-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.cl-title{font-weight:700;font-size:15px;margin-bottom:4px}
+.cl-text{font-size:14px;color:var(--text-sec);line-height:1.65}
+.mt-2{margin-top:20px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.tbl th{background:var(--navy);color:#fff;padding:12px 16px;text-align:left;font-weight:600;font-size:13px}
+.tbl td{padding:12px 16px;border-bottom:1px solid var(--border)}
+.tbl tr:nth-child(even){background:var(--bg-card)}
+.tbl .highlight{font-weight:600;color:var(--navy);white-space:nowrap}
+.ladder{display:flex;flex-direction:column;gap:12px}
+.ladder-item{display:flex;gap:16px;align-items:flex-start;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);transition:all .2s}
+.ladder-item:hover{background:var(--bg-hover);border-color:var(--navy-light)}
+.ladder-level{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:16px;flex-shrink:0}
+.ladder-body{flex:1}
+.ladder-name{font-weight:700;font-size:16px;margin-bottom:4px}
+.ladder-desc{font-size:14px;color:var(--text-sec);line-height:1.6}
+.ladder-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ladder-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:6px}
+.flow-step{display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);position:relative}
+.flow-step:not(:last-child)::after{content:'';position:absolute;left:37px;bottom:-13px;width:2px;height:12px;background:var(--border)}
+.flow-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;flex-shrink:0}
+.flow-body{flex:1}
+.flow-title{font-weight:700;font-size:15px;margin-bottom:4px}
+.flow-text{font-size:14px;color:var(--text-sec);line-height:1.6}
+.flow-container{display:flex;flex-direction:column;gap:12px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+@media(max-width:600px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{border-radius:var(--radius);padding:32px 28px;text-align:center}
+.compare-card h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.compare-card .price{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;margin:12px 0 4px}
+.compare-card .period{font-size:14px;margin-bottom:16px;color:var(--text-muted)}
+.compare-card ul{text-align:left;list-style:none;font-size:14px;display:flex;flex-direction:column;gap:8px}
+.compare-card li::before{content:'✓ ';color:var(--green);font-weight:700}
+.compare-card-primary{background:linear-gradient(135deg,#0f1d3a,#1a3a6b);color:#fff}
+.compare-card-primary h3{color:#fff}
+.compare-card-primary .price{color:#fff}
+.compare-card-primary .period{color:rgba(255,255,255,.55)}
+.compare-card-primary li::before{color:#6ee7b7}
+.compare-card-primary li{color:rgba(255,255,255,.85)}
+.compare-card-secondary{background:var(--bg-card);border:2px solid var(--border)}
+.badge-anchor{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.badge-anchor-primary{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+.badge-anchor-secondary{background:var(--navy-dim);color:var(--navy)}
+.site-footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--navy);letter-spacing:2px;margin-bottom:8px}
+.footer-text{font-size:13px;color:var(--text-muted)}
+.footer-note{font-size:11px;color:var(--text-muted);margin-top:16px;opacity:.6}
+.back-to-top{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:none;font-size:20px;cursor:pointer;opacity:0;transition:opacity .3s;z-index:99;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.back-to-top.show{opacity:1}
+.gantt{margin-top:16px;overflow-x:auto}
+.gantt-months-track{display:grid;text-align:center;font-size:11px;color:var(--text-muted);font-weight:600}
+.gantt-row{display:grid;gap:0;margin-bottom:3px}
+.gantt-label{font-size:12px;font-weight:600;display:flex;align-items:center;padding-right:12px;color:var(--text-sec)}
+.gantt-track{display:grid;gap:3px}
+.gantt-cell{height:28px;border-radius:4px;background:var(--bg-card);border:1px solid var(--border)}
+.gantt-cell.active{border:none}
+</style>
+</head>
+<body>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-badge">Proposta de Implementação</div>
+  <h1 class="header-title">Infraestrutura de IA para Operação de Conteúdo</h1>
+  <p class="header-sub">Proposta personalizada para Tiago Zanolla</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="visao">Visão Geral</button>
+    <button class="tab-btn" data-tab="diagnostico">Diagnóstico</button>
+    <button class="tab-btn" data-tab="sistemas">Os Sistemas</button>
+    <button class="tab-btn" data-tab="entregaveis">Entregáveis</button>
+    <button class="tab-btn" data-tab="cronograma">Cronograma</button>
+    <button class="tab-btn" data-tab="investimento">Investimento</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ========== TAB 1: VISÃO GERAL ========== -->
+<section class="tab-panel active" id="tab-visao">
+
+  <div class="section">
+    <div class="section-label">Tiago Zanolla</div>
+    <div class="section-title">Uma Operação de Conteúdo que Cresceu Além do Manual</div>
+    <div class="section-desc">Professor e coordenador no Estratégia Concursos, produtor independente com plataforma própria de cursos, e empreendedor digital há dois anos construindo um negócio que já escala o suficiente para revelar os seus gargalos reais.</div>
+
+    <div class="card-grid card-grid-4">
+      <div class="card stat-card">
+        <div class="num">3.000+</div>
+        <div class="label">Cursos produzidos</div>
+      </div>
+      <div class="card stat-card">
+        <div class="num">500</div>
+        <div class="label">Páginas de conteúdo/semana</div>
+      </div>
+      <div class="card stat-card">
+        <div class="num">60</div>
+        <div class="label">Leis processadas manualmente/semana</div>
+      </div>
+      <div class="card stat-card">
+        <div class="num">7-8</div>
+        <div class="label">Passos manuais por publicação</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">O problema central</div>
+    <div class="section-title">Você Escalou a Produção. Não Escalou a Inteligência.</div>
+
+    <div class="callout callout-red">
+      <span class="cl-icon">🚨</span>
+      <div>
+        <div class="cl-title">O paradoxo de quem já usa IA no dia a dia</div>
+        <div class="cl-text">Você já tem Claude Max, Perplexity, Plaud, Lovart, Manus. Já fez 10x mais conteúdo com menos gente. O problema não é mais produção — é que cada vez que você produz algo novo, começa do zero. O conteúdo antigo não alimenta o novo. As mentorias que você pagou caro para aprender não viram material de aula automaticamente. Os seus 3.000 cursos existem em silos que não conversam entre si. Você acumulou muito ativo e zero infraestrutura para reutilizá-lo.</div>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-3 mt-2">
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-red"></span> Memória fragmentada</div>
+        <div class="ic-text">Querer falar sobre um tópico específico do seu negócio de concursos — uma lei, um cargo, um edital — significa abrir drives, projetos nas IAs, arquivos em pastas diferentes. Não existe um lugar onde tudo que você já produziu sobre aquele assunto esteja acessível em segundos.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-orange"></span> Operacional na mão humana</div>
+        <div class="ic-text">Sua esposa processa 60 leis por semana manualmente: copia a lei, gera teoria, gera questões, gera resumo, junta tudo. Um processo repetível e previsível sendo executado por uma pessoa quando poderia estar rodando sozinho enquanto vocês dormem.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-gold"></span> Pipeline de marketing sem automação</div>
+        <div class="ic-text">Perplexity → GPT → Manus → WordPress → GPT → Lovart → MLabs. Sete ou oito passos que você faz toda vez na mão. Um conteúdo que poderia ser disparado por um comando e sair publicado em todas as plataformas.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A solução</div>
+    <div class="section-title">Uma Central de Inteligência que Trabalha Enquanto Você Cria</div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-navy"></span> Knowledge Hub central</div>
+        <div class="ic-text">Um vault no Obsidian conectado ao Claude Code que funciona como memória institucional da sua operação. Tudo que você aprendeu nas mentorias, todos os conteúdos produzidos, todos os materiais — pesquisáveis, conectados e acessíveis por IA em segundos.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-blue"></span> OpenClaw customizado para você</div>
+        <div class="ic-text">Um OpenClaw configurado especificamente para a sua operação funciona como o CEO dos seus agentes — você manda um áudio ou mensagem no WhatsApp ou Telegram e ele delega, executa e reporta. Agentes especializados rodando em VPS 24h: legislação, marketing, blog. Você comanda, eles entregam.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-green"></span> Fluxos encadeados, não isolados</div>
+        <div class="ic-text">Os sistemas se alimentam. O conteúdo novo vai para o vault. O vault alimenta os agentes. Os agentes geram artigos, carrosséis, posts — e tudo vai publicado automaticamente. Ciclo completo sem intervenção manual.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-purple"></span> Estrutura para a mentoria de concursos</div>
+        <div class="ic-text">O mesmo sistema que organiza o seu negócio vira a espinha dorsal da mentoria que você quer montar para concurseiros. Você para de criar conteúdo do zero para ensinar e começa a monetizar o conhecimento que já acumulou, com IA conectada a tudo que já produziu.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-green mt-2">
+      <span class="cl-icon">📊</span>
+      <div>
+        <div class="cl-title">O impacto esperado</div>
+        <div class="cl-text">Com os cinco sistemas implementados, você e sua esposa param de executar tarefas repetíveis manualmente. Você passa a comandar agentes, não operar ferramentas. Cada lei nova que entrar no sistema vai sair como teoria, questões e resumo formatado. Cada ideia de conteúdo vai sair como artigo publicado, carrossel gerado e post programado — sem você abrir uma ferramenta.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== TAB 2: DIAGNÓSTICO ========== -->
+<section class="tab-panel" id="tab-diagnostico">
+
+  <div class="section">
+    <div class="section-label">Situação atual</div>
+    <div class="section-title">O Fluxo de Hoje, Passo a Passo</div>
+    <div class="section-desc">Mapeamento dos processos identificados na call. Cada fluxo abaixo está sendo executado manualmente hoje e tem potencial de automação total ou parcial.</div>
+
+    <div class="flow-container">
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--red)">1</div>
+        <div class="flow-body">
+          <div class="flow-title">Produção de material de legislação</div>
+          <div class="flow-text">Sua esposa copia a lei → cola no Claude → gera a teoria → gera as questões → gera o resumo → junta tudo → formata o PDF. Processo repetido para cada uma das 60+ leis por semana. Total: horas de trabalho operacional por semana que poderiam ser zero.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--orange)">2</div>
+        <div class="flow-body">
+          <div class="flow-title">Pipeline de conteúdo de marketing</div>
+          <div class="flow-text">Perplexity (pesquisa) → GPT (roteiro SEO) → Manus (artigo/landing page) → Publicação manual no WordPress/Elementor → GPT (texto do carrossel) → Lovart (carrossel visual) → EmLab (publicação nas redes). Sete etapas manuais para cada publicação.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--gold)">3</div>
+        <div class="flow-body">
+          <div class="flow-title">Acesso ao conhecimento acumulado</div>
+          <div class="flow-text">Para criar novo conteúdo sobre qualquer assunto, você precisa abrir drives, projetos nas IAs, pastas diversas para pesquisar o que já produziu. Não existe busca centralizada. Cada nova criação parte do zero mesmo quando você já tem material sobre aquele tema.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--navy)">4</div>
+        <div class="flow-body">
+          <div class="flow-title">Blog e presença orgânica</div>
+          <div class="flow-text">Você quer ranquear no SEO/GEO com conteúdo do nicho de concursos e do marketplace de cursos. Hoje isso depende de você pesquisar temas, criar o artigo manualmente e publicar. Não existe fluxo recorrente rodando sem sua intervenção.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--teal)">5</div>
+        <div class="flow-body">
+          <div class="flow-title">Base de conhecimento para mentoria</div>
+          <div class="flow-text">Você quer montar sua mentoria e precisa de um sistema que consulte tudo que você já aprendeu (mentorias do Ladeira, Hoser, Nero — gravadas com Plaud e transcritas) para gerar briefings, frameworks e roteiros. Hoje esse material existe em arquivos dispersos sem conexão inteligente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Comparativo</div>
+    <div class="section-title">Operação Manual vs. Operação com Agentes</div>
+
+    <table class="tbl">
+      <thead>
+        <tr><th>Processo</th><th>Como é hoje</th><th>Como ficará</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="highlight">Legislação</td><td>Esposa processa 1 lei por vez, manualmente</td><td>Pasta de entrada → agente processa e entrega formatado</td></tr>
+        <tr><td class="highlight">Publicação de conteúdo</td><td>7-8 passos manuais por publicação</td><td>1 comando → artigo + carrossel + post publicados</td></tr>
+        <tr><td class="highlight">Busca de conteúdo</td><td>Abre drives, IAs, pastas separadas</td><td>Pergunta ao vault → recebe o que já existe</td></tr>
+        <tr><td class="highlight">Blog / SEO</td><td>Pesquisa e escreve manualmente quando dá</td><td>Agente pesquisa e publica automaticamente</td></tr>
+        <tr><td class="highlight">Preparo de aula</td><td>Busca manual nas transcrições das mentorias</td><td>Agente consulta a base e gera briefing</td></tr>
+        <tr><td class="highlight">Trabalho da esposa</td><td>Operacional repetitivo semana a semana</td><td>Supervisão e curadoria de conteúdo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Ferramentas atuais</div>
+    <div class="section-title">O que você já usa e como isso se encaixa</div>
+
+    <div class="card-grid card-grid-3">
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-navy"></span> Claude Max</div>
+        <div class="ic-text">Você já usa o plano Max. Ele continua sendo o cérebro central dos agentes. Nenhuma migração necessária — o sistema se constrói em cima do que você já tem.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-blue"></span> Plaud + Transcrições</div>
+        <div class="ic-text">As gravações das mentorias já transcritas são o insumo principal para o Knowledge Hub. Todo esse conteúdo vai estruturado no vault para ser consultado pela IA.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-purple"></span> Lovart + MLabs</div>
+        <div class="ic-text">Ficam no pipeline. O agente de marketing vai acionar essas ferramentas via API/automação ao invés de você acionar manualmente.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-green"></span> Hostinger / VPS</div>
+        <div class="ic-text">Você já tem conta na Hostinger. É onde os agentes vão rodar 24h. Custo mensal de R$30-80 dependendo da demanda. Nenhuma máquina em casa, nenhum Mac Mini.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-orange"></span> WordPress / Elementor</div>
+        <div class="ic-text">O agente de blog vai publicar diretamente via API do WordPress. Você define as categorias e o agente gerencia o calendário editorial e as publicações.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-teal"></span> Perplexity + GPT</div>
+        <div class="ic-text">Podem ser substituídos ou integrados. O objetivo é centralizar no Claude com acesso a busca web, reduzindo o número de assinaturas pagas no final do mês.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== TAB 3: OS SISTEMAS ========== -->
+<section class="tab-panel" id="tab-sistemas">
+
+  <div class="section">
+    <div class="section-label">Arquitetura da solução</div>
+    <div class="section-title">OpenClaw + 5 Sistemas, 1 Operação Inteligente</div>
+    <div class="section-desc">Cada sistema resolve um gargalo específico identificado na conversa. Eles são independentes — podem ser implementados por prioridade — mas todos se integram em torno do OpenClaw e do Knowledge Hub central.</div>
+
+    <div class="callout callout-green" style="margin-bottom:20px">
+      <span class="cl-icon">🤖</span>
+      <div>
+        <div class="cl-title">OpenClaw — O CEO da sua operação de IA</div>
+        <div class="cl-text">O OpenClaw é o sistema operacional de toda a estrutura. Pensa nele como um CEO virtual: você manda um áudio ou mensagem no WhatsApp ou Telegram com um comando — "gera o conteúdo sobre o edital do TRF" ou "processa as leis que subi hoje" — e ele delega para os agentes certos, acompanha a execução e te reporta quando tudo estiver pronto. Você não precisa abrir nenhuma ferramenta. O OpenClaw é configurado especificamente para a sua operação e roda 24h na VPS.</div>
+      </div>
+    </div>
+
+    <div class="ladder">
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--navy)">1</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Knowledge Hub — Obsidian + Claude Code</div>
+          <div class="ladder-desc">O centro de tudo. Vault no Obsidian estruturado para o seu negócio: materiais de cursos, conteúdos produzidos, frameworks aprendidos, prompts, swipe files, referências de concursos. Conectado ao Claude Code para busca semântica inteligente. Quando você quiser criar conteúdo sobre qualquer tópico do seu negócio de concursos, pergunta ao vault — ele te dá tudo que você já tem sobre aquele tema, com as conexões entre os documentos.</div>
+          <div class="ladder-tags">
+            <span class="ladder-tag" style="background:var(--navy-dim);color:var(--navy)">Obsidian</span>
+            <span class="ladder-tag" style="background:var(--blue-dim);color:var(--blue)">Claude Code</span>
+            <span class="ladder-tag" style="background:var(--purple-dim);color:var(--purple)">Busca semântica</span>
+            <span class="ladder-tag" style="background:var(--green-dim);color:var(--green)">Base fundação</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--blue)">2</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Agente de Legislação — Processamento Autônomo de Leis</div>
+          <div class="ladder-desc">Agente rodando em VPS que monitora uma pasta de entrada. Quando você ou sua esposa jogam um arquivo de lei lá, ele executa automaticamente: lê a legislação completa → gera a teoria didática → cria as questões → escreve o resumo → formata o PDF no padrão visual do Estratégia → salva na pasta de saída. 60 leis por semana sem nenhuma interação humana no processo.</div>
+          <div class="ladder-tags">
+            <span class="ladder-tag" style="background:var(--blue-dim);color:var(--blue)">OpenClaw / VPS</span>
+            <span class="ladder-tag" style="background:var(--orange-dim);color:var(--orange)">Pasta de entrada</span>
+            <span class="ladder-tag" style="background:var(--green-dim);color:var(--green)">PDF formatado</span>
+            <span class="ladder-tag" style="background:var(--navy-dim);color:var(--navy)">Maior ROI imediato</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--purple)">3</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Pipeline de Marketing — 1 Comando, 7 Passos Automáticos</div>
+          <div class="ladder-desc">Você define o tema. O agente faz o restante: pesquisa no Perplexity/web → gera roteiro SEO → produz o artigo → publica no WordPress → cria o texto do carrossel → aciona o Lovart para gerar o visual → programa a publicação no MLabs. O que hoje é uma sequência manual de 7 etapas vira um único comando. Pode ser agendado para rodar diariamente em horário fixo.</div>
+          <div class="ladder-tags">
+            <span class="ladder-tag" style="background:var(--purple-dim);color:var(--purple)">Automação total</span>
+            <span class="ladder-tag" style="background:var(--teal-dim);color:var(--teal)">WordPress API</span>
+            <span class="ladder-tag" style="background:var(--orange-dim);color:var(--orange)">Lovart integrado</span>
+            <span class="ladder-tag" style="background:var(--blue-dim);color:var(--blue)">MLabs integrado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--teal)">4</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Agente de Blog — SEO/GEO em Piloto Automático</div>
+          <div class="ladder-desc">Agente que roda a cada X horas: pesquisa tendências e editais recentes no nicho de concursos + cursos do seu marketplace → identifica palavras-chave com potencial → gera artigo otimizado para SEO e GEO (busca nas IAs) → publica direto no WordPress com metadata, categorias e imagens. Seu blog cresce de forma consistente sem você escrever uma linha.</div>
+          <div class="ladder-tags">
+            <span class="ladder-tag" style="background:var(--teal-dim);color:var(--teal)">Recorrente</span>
+            <span class="ladder-tag" style="background:var(--green-dim);color:var(--green)">SEO/GEO</span>
+            <span class="ladder-tag" style="background:var(--navy-dim);color:var(--navy)">WordPress auto-publish</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--gold)">5</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Base da Mentoria para Concurseiros — Conhecimento Que se Transforma em Produto</div>
+          <div class="ladder-desc">Todo o conteúdo que você já produziu ao longo dos anos — aulas, materiais, transcrições gravadas com Plaud — processado e indexado no Knowledge Hub. Quando você quiser estruturar um módulo da sua mentoria para concurseiros, pergunta ao sistema: ele puxa o conteúdo relevante, conecta os materiais e gera um briefing estruturado. Você monetiza o que já sabe, sem criar do zero.</div>
+          <div class="ladder-tags">
+            <span class="ladder-tag" style="background:var(--gold-dim);color:var(--gold)">Plaud → Vault</span>
+            <span class="ladder-tag" style="background:var(--purple-dim);color:var(--purple)">Geração de frameworks</span>
+            <span class="ladder-tag" style="background:var(--blue-dim);color:var(--blue)">Roteiros automáticos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Infraestrutura técnica</div>
+    <div class="section-title">VPS vs. Máquina Local</div>
+
+    <div class="callout callout-gold">
+      <span class="cl-icon">⚡</span>
+      <div>
+        <div class="cl-title">Por que VPS e não Mac Mini</div>
+        <div class="cl-text">Os agentes ficam rodando 24h na VPS (R$30-80/mês na Hostinger que você já usa). Nenhuma máquina em casa, nenhum custo de energia, backup automático incluído. Se precisar escalar, aumenta o plano. Mac Mini equivalente: R$3.000+ de entrada, R$100+/mês de energia, depende da sua conexão e pode travar com carga alta. Para sua operação, VPS é mais barato, mais confiável e já está na infraestrutura que você conhece.</div>
+      </div>
+    </div>
+
+    <table class="tbl mt-2">
+      <thead>
+        <tr><th>Item</th><th>Solução</th><th>Custo mensal estimado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="highlight">Agentes (VPS)</td><td>Hostinger KVM / Hetzner</td><td style="color:var(--green);font-weight:700">R$ 30-80</td></tr>
+        <tr><td class="highlight">IA (Claude)</td><td>Claude Max (você já tem)</td><td style="color:var(--blue);font-weight:700">R$ 700</td></tr>
+        <tr><td class="highlight">Knowledge Hub</td><td>Obsidian + Sync (sincronização entre dispositivos)</td><td style="color:var(--blue);font-weight:700">R$ 20</td></tr>
+        <tr><td class="highlight">Perplexity</td><td>Pode ser substituído pelo Claude com web search</td><td style="color:var(--teal);font-weight:700">Economia potencial</td></tr>
+        <tr><td class="highlight">GPT</td><td>Pode ser substituído pelo Claude</td><td style="color:var(--teal);font-weight:700">Economia potencial</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- ========== TAB 4: ENTREGÁVEIS ========== -->
+<section class="tab-panel" id="tab-entregaveis">
+
+  <div class="section">
+    <div class="section-label">O que você recebe</div>
+    <div class="section-title">Entregáveis Detalhados</div>
+    <div class="section-desc">Independente do modelo escolhido, estes são os sistemas que serão construídos. A diferença entre os modelos é quem opera a construção e o formato de aprendizado.</div>
+
+    <div class="card-grid card-grid-4">
+      <div class="card stat-card" style="border-top:3px solid var(--navy)">
+        <div class="num">5</div>
+        <div class="label">Sistemas implementados</div>
+      </div>
+      <div class="card stat-card" style="border-top:3px solid var(--green)">
+        <div class="num">24/7</div>
+        <div class="label">Agentes rodando</div>
+      </div>
+      <div class="card stat-card" style="border-top:3px solid var(--blue)">
+        <div class="num">0</div>
+        <div class="label">Intervenção manual nos fluxos</div>
+      </div>
+      <div class="card stat-card" style="border-top:3px solid var(--purple)">
+        <div class="num">2</div>
+        <div class="label">Pessoas capacitadas (você + esposa)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Sistema 1</div>
+    <div class="section-title">Knowledge Hub</div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-navy"></span> Vault estruturado no Obsidian</div>
+        <div class="ic-text">Estrutura de pastas e templates para o seu contexto específico: conteúdos de curso, mentorias, frameworks de negócio, prompts, referências de copy e marketing. Configurado com os plugins certos, sem excesso.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-blue"></span> Integração nativa com Claude</div>
+        <div class="ic-text">Configuração do Obsidian com integração ao Claude Code para que a IA consiga ler e conectar os documentos do vault com precisão. Busca semântica funcionando sobre todo o seu conteúdo.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-purple"></span> Importação das transcrições do Plaud</div>
+        <div class="ic-text">Pipeline para importar, organizar e indexar automaticamente as transcrições das suas mentorias. O conteúdo que você pagou caro para aprender vira material consultável em segundos.</div>
+      </div>
+      <div class="card info-card">
+        <div class="ic-title"><span class="dot dot-green"></span> Documentação de uso</div>
+        <div class="ic-text">Guia de como usar o vault no dia a dia: como adicionar novo material, como consultar, como estruturar novas notas. Tanto você quanto sua esposa conseguem operar sem depender de suporte.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Sistema 2</div>
+    <div class="section-title">Agente de Legislação</div>
+
+    <div class="flow-container">
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--blue)">1</div>
+        <div class="flow-body">
+          <div class="flow-title">Pasta de entrada configurada</div>
+          <div class="flow-text">Você ou sua esposa jogam o arquivo da lei (PDF, DOCX, TXT) em uma pasta específica. O agente detecta automaticamente o novo arquivo.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--blue)">2</div>
+        <div class="flow-body">
+          <div class="flow-title">Processamento sequencial com verificação</div>
+          <div class="flow-text">O agente executa: leitura completa → geração da teoria didática → criação das questões de concurso → elaboração do resumo. Cada etapa é verificada antes de avançar, evitando o "delirio" que você mencionou com o GPT.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num" style="background:var(--blue)">3</div>
+        <div class="flow-body">
+          <div class="flow-title">Formatação e entrega</div>
+          <div class="flow-text">PDF formatado nas cores e padrão visual do seu material entregue na pasta de saída. Notificação via Telegram quando o processamento termina. Você abre, revisa e aprova — nada mais.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Sistemas 3, 4 e 5</div>
+    <div class="section-title">Pipeline de Marketing, Blog Automático e Base da Mentoria</div>
+
+    <table class="tbl">
+      <thead>
+        <tr><th>Sistema</th><th>Entregável</th><th>Resultado final</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="highlight">Pipeline de Marketing</td>
+          <td>Agente com fluxo completo Perplexity→WordPress→Lovart→MLabs conectado via API</td>
+          <td>1 comando → conteúdo publicado em todas as plataformas</td>
+        </tr>
+        <tr>
+          <td class="highlight">Blog Automático</td>
+          <td>Agente recorrente configurado para pesquisar, escrever e publicar no WordPress</td>
+          <td>Blog crescendo com artigos SEO/GEO sem intervenção</td>
+        </tr>
+        <tr>
+          <td class="highlight">Base da Mentoria</td>
+          <td>Vault indexado com conteúdos produzidos + agente gerador de briefings e frameworks para concurseiros</td>
+          <td>Novo módulo de mentoria estruturado em minutos a partir do que você já sabe</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- ========== TAB 5: CRONOGRAMA ========== -->
+<section class="tab-panel" id="tab-cronograma">
+
+  <div class="section">
+    <div class="section-label">Linha do tempo</div>
+    <div class="section-title">Prioridade por Impacto Imediato</div>
+    <div class="section-desc">Os sistemas são implementados por ordem de ROI. O agente de legislação vai no topo porque libera sua esposa de 15-20h de trabalho operacional por semana imediatamente.</div>
+
+    <div class="ladder">
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--navy)">S1-2</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Semanas 1-2 — Fundação: Knowledge Hub</div>
+          <div class="ladder-desc">Setup do Obsidian, estrutura de vault, integração com Claude Code, importação das primeiras transcrições do Plaud. Você já começa a usar ao final da semana 2. Configuração da VPS com os agentes base.</div>
+        </div>
+      </div>
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--blue)">S2-3</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Semanas 2-3 — Maior ROI: Agente de Legislação</div>
+          <div class="ladder-desc">Construção e testes do agente de processamento de leis. Sua esposa testa com leis reais, refinamos o output até estar no padrão exigido pelo Estratégia. Liberação em produção ao final.</div>
+        </div>
+      </div>
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--purple)">S3-4</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Semanas 3-4 — Pipeline de Marketing</div>
+          <div class="ladder-desc">Configuração das integrações com WordPress, Lovart e EmLab. Construção do fluxo completo de publicação. Testes com conteúdos reais do seu marketplace de cursos e concursos.</div>
+        </div>
+      </div>
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--teal)">S4-5</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Semanas 4-5 — Blog Automático</div>
+          <div class="ladder-desc">Agente de blog configurado com frequência e critérios de pauta. Calendário editorial gerado automaticamente. Primeiro lote de artigos publicados para validar qualidade e indexação.</div>
+        </div>
+      </div>
+      <div class="ladder-item">
+        <div class="ladder-level" style="background:var(--gold)">S5-6</div>
+        <div class="ladder-body">
+          <div class="ladder-name">Semanas 5-6 — Base da Mentoria + Handover</div>
+          <div class="ladder-desc">Indexação do conteúdo acumulado, configuração do agente de briefing para a mentoria de concurseiros. Sessão de handover com você e sua esposa: demonstração de todos os sistemas, como adicionar novos fluxos, como monitorar e ajustar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Pós-implementação</div>
+    <div class="section-title">O que acontece depois das 6 semanas</div>
+
+    <div class="callout callout-green">
+      <span class="cl-icon">🔄</span>
+      <div>
+        <div class="cl-title">Sistemas entregues, não dependência criada</div>
+        <div class="cl-text">O objetivo é que ao final você e sua esposa operem tudo de forma autônoma. Os agentes são documentados, os prompts são seus, a VPS é sua, o vault é seu. Você não fica preso em nenhum serviço que não seja rescindível a qualquer momento. Suporte pós-entrega incluso para ajustes e novos fluxos durante o período acordado.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== TAB 6: INVESTIMENTO ========== -->
+<section class="tab-panel" id="tab-investimento">
+
+  <div class="section">
+    <div class="section-label">Modelo de trabalho</div>
+    <div class="section-title">Duas Formas de Chegar ao Mesmo Resultado</div>
+    <div class="section-desc">Os sistemas entregues são os mesmos. A diferença é como você quer chegar lá — e o que você leva além da infraestrutura pronta.</div>
+
+    <div class="compare-grid">
+      <div class="compare-card compare-card-primary">
+        <h3>Faço para você</h3>
+        <div class="price">R$ 20.000</div>
+        <div class="period">Implementação completa em 4-6 semanas</div>
+        <ul>
+          <li>Todos os 5 sistemas construídos por mim</li>
+          <li>OpenClaw configurado e integrado</li>
+          <li>Knowledge Hub configurado e populado</li>
+          <li>Agente de legislação em produção</li>
+          <li>Pipeline de marketing integrado</li>
+          <li>Blog automático rodando</li>
+          <li>Base da mentoria estruturada</li>
+          <li>Documentação completa de operação</li>
+          <li>Sessão de handover com você e sua esposa</li>
+          <li>Suporte pós-entrega para ajustes</li>
+        </ul>
+      </div>
+
+      <div class="compare-card compare-card-secondary">
+        <h3>Faço com você</h3>
+        <div class="price" style="color:var(--navy)">R$ 15.000</div>
+        <div class="period">Mentoria intensiva de implementação</div>
+        <ul>
+          <li>Todos os 5 sistemas — construídos juntos</li>
+          <li>OpenClaw configurado por vocês</li>
+          <li>Você e sua esposa aprendem cada etapa</li>
+          <li>Frequência de encontros adaptada à sua agenda</li>
+          <li>Duração: até os sistemas estarem rodando</li>
+          <li>Você passa a criar novos agentes sozinho</li>
+          <li>Autonomia total ao final do processo</li>
+          <li>Documentação e biblioteca de prompts</li>
+          <li>Suporte via WhatsApp durante a implementação</li>
+          <li>Acesso a uma pessoa adicional (sua esposa)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Retorno sobre investimento</div>
+    <div class="section-title">A Conta que Fecha</div>
+
+    <div class="callout callout-green">
+      <span class="cl-icon">💰</span>
+      <div>
+        <div class="cl-title">Quanto vale o tempo da sua esposa por semana?</div>
+        <div class="cl-text">Ela processa 60 leis por semana manualmente. Estimativa conservadora: 15-20h de trabalho operacional repetitivo. Só o agente de legislação, ao liberar esse tempo para ela trabalhar em tarefas de maior valor, já justifica o investimento em semanas. Isso sem contar o pipeline de marketing e o blog que passam a gerar conteúdo sem custo de tempo.</div>
+      </div>
+    </div>
+
+    <table class="tbl mt-2">
+      <thead>
+        <tr><th>Cenário</th><th>Impacto</th><th>Estimativa mensal</th><th>Payback</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="highlight">Conservador</td><td>Só o agente de legislação funcionando</td><td>15-20h de trabalho liberadas/semana</td><td style="color:var(--green);font-weight:700">Imediato</td></tr>
+        <tr><td class="highlight">Realista</td><td>Legislação + pipeline de marketing + blog</td><td>Redução de R$1.500-3.000 em ferramentas + tempo</td><td style="color:var(--green);font-weight:700">2-3 meses</td></tr>
+        <tr><td class="highlight">Otimista</td><td>Mentoria lançada usando a base de conhecimento</td><td>Novo produto de alta margem estruturado</td><td style="color:var(--green);font-weight:700">Primeiro lançamento</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Condições</div>
+    <div class="section-title">Plano de Pagamento em 3 Parcelas via PIX</div>
+
+    <table class="tbl" style="margin-bottom:20px">
+      <thead>
+        <tr><th>Parcela</th><th>Faço para você — R$ 20.000</th><th>Faço com você — R$ 15.000</th><th>Momento</th><th>O que já estará rodando</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="highlight">1ª Parcela</td>
+          <td style="color:var(--green);font-weight:700">R$ 8.000</td>
+          <td style="color:var(--green);font-weight:700">R$ 6.000</td>
+          <td>Assinatura</td>
+          <td>Início do projeto — Knowledge Hub e OpenClaw em setup</td>
+        </tr>
+        <tr>
+          <td class="highlight">2ª Parcela</td>
+          <td style="color:var(--blue);font-weight:700">R$ 7.000</td>
+          <td style="color:var(--blue);font-weight:700">R$ 5.000</td>
+          <td>30 dias</td>
+          <td>Agente de legislação em produção + pipeline de marketing configurado</td>
+        </tr>
+        <tr>
+          <td class="highlight">3ª Parcela</td>
+          <td style="color:var(--navy);font-weight:700">R$ 5.000</td>
+          <td style="color:var(--navy);font-weight:700">R$ 4.000</td>
+          <td>Entrega final</td>
+          <td>Blog automático + base da mentoria + handover completo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <span class="cl-icon">💳</span>
+      <div>
+        <div class="cl-title">Pagamento exclusivo via PIX</div>
+        <div class="cl-text">As três parcelas são realizadas via PIX. As datas seguem o cronograma de entrega — você só paga a próxima parcela quando os sistemas da etapa anterior já estiverem funcionando. O investimento acompanha os resultados.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="text-align:center">
+    <div class="callout">
+      <span class="cl-icon">🚀</span>
+      <div>
+        <div class="cl-title">Próximo passo</div>
+        <div class="cl-text">Você já tem a operação, o conteúdo, a audiência e as ferramentas certas. O que falta é a camada de inteligência que conecta tudo e libera você e sua esposa do operacional. Com a assinatura, começamos na semana que vem — o agente de legislação entra em produção antes do fim do mês.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<button class="back-to-top" id="backToTop" title="Voltar ao topo">↑</button>
+
+<footer class="site-footer">
+  <div class="footer-logo">GABRIEL SILVESTRI</div>
+  <p class="footer-text">Especialista em IA aplicada, automação e infraestrutura de conteúdo</p>
+  <p class="footer-note">Documento confidencial. Elaborado exclusivamente para Tiago Zanolla, Março 2026.</p>
+</footer>
+
+<script>
+const tabBtns=document.querySelectorAll('.tab-btn'),tabPanels=document.querySelectorAll('.tab-panel');
+tabBtns.forEach(btn=>{btn.addEventListener('click',()=>{const t=btn.dataset.tab;tabBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');tabPanels.forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})})});
+const header=document.getElementById('siteHeader'),btt=document.getElementById('backToTop');
+window.addEventListener('scroll',()=>{header.classList.toggle('scrolled',window.scrollY>50);btt.classList.toggle('show',window.scrollY>400)});
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>
